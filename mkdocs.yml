@@ -1,2 +1,7 @@
- theme:
-   name: material
+site_name: SimpliML
+site_dir: build_docs
+repo_url: https://github.com/rajaddr/simpliml
+site_description: ''
+
+theme:
+   name: readthedocs
