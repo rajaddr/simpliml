@@ -1,7 +1,7 @@
 import json
 
 version_json = '''{
-    "__date__": "2025-01-19 17:42:32.383750",
+    "__date__": "2025-01-19 21:39:07.588477",
     "__author__": "Dharmaraj D",
     "__version__": "1.0.28",
     "__email__": "rajaddr@gmail.com",
