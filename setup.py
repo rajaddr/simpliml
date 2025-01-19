@@ -1,7 +1,7 @@
 import setuptools, os, datetime, license
 
 pckName = "simpliml"
-version = "1.0.28"
+version = "1.0.29"
 python_requires=">=3.9,<3.13"
 author = "Dharmaraj D"
 status = "Development Status :: 1 - Planning"
@@ -36,9 +36,9 @@ def get_about():
 """%(datetime.datetime.now(),author, version, author_email, description, keywords, url, licenseType, status.split()[-1], docURL))
 
 with open('README.md', 'w') as f:
-    f.write("""<div align="center">
-
-![SimpliML](https://i.ibb.co/KWCTBQP/NameSml.png) 
+    f.write("""<p align="center">
+    
+    <img src="https://i.ibb.co/KWCTBQP/NameSml.png"/></p> 
 
 ![Python](https://img.shields.io/static/v1?label=Python&labelColor=007676&message={0}&color=01C0C0&style=flat&logoColor=01C0C0&logo=python)
 [![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message={1}&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/{1}/)
@@ -48,7 +48,7 @@ with open('README.md', 'w') as f:
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0)
 
 <hr>
-</div>
+
 
 ## Project description
 **SimpliML** is a versatile machine learning library designed to be a one-stop solution for the entire data lifecycle. Whether you're preparing raw data or deploying advanced predictive models, *SimpliML* simplifies every step of the machine learning process.  
