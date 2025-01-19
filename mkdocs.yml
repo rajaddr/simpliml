@@ -7,6 +7,6 @@ theme:
    name: readthedocs
 nav:
   - SimpliML: index.md
-  - Install: install.md
+  - Installation: install.md
   - Time Series: tsf.md
   - About: about.md

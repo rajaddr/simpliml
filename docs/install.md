@@ -4,7 +4,7 @@
 pip install simpliml
 ```
 
-## Dependencies
+### Dependencies
 ![Pandas](https://img.shields.io/static/v1?label=Pandas&labelColor=007676&message=>=2.2.3&color=01C0C0&style=flat&logoColor=01C0C0&logo=pandas)
 ![NumPy](https://img.shields.io/static/v1?label=NumPy&labelColor=007676&message=>=1.26.2&color=01C0C0&style=flat&logoColor=01C0C0&logo=NumPy)
 ![SciPy](https://img.shields.io/static/v1?label=SciPy&labelColor=007676&message=>=1.14.1&color=01C0C0&style=flat&logoColor=01C0C0&logo=SciPy)

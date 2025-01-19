@@ -19,7 +19,8 @@ sourceDF = pd.read_csv("") # Any Input data read
 dataDF, futureDF = tsf.generateTSData(sourceDF, format='%Y-%m', freq='MS', periods=30)
 ```
 Parameters:-
-- format : str, optional 
+
+- format : str, optional
   - Please refer [strftime-and-strptime-behavior](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)
 - freq : str, optional
   - Please refer [timeseries-offset-aliases](https://pandas.pydata.org/docs/user_guide/timeseries.html#timeseries-offset-aliases)

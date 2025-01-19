@@ -1,6 +1,6 @@
 <div align="center">
 
-![SimpliML](Images/NameSml.png) 
+![SimpliML]((https://i.ibb.co/KWCTBQP/NameSml.png)) 
 <hr>
 </div>
 
