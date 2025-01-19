@@ -11,7 +11,7 @@ build:
     python: "3.12"
   jobs:
     pre_build:
-      - grep -v "![" README.md > docs/index.md
+      - grep -v "img.shields.io" README.md > docs/index.md
       - cp CHANGELOG.md docs/CHANGELOG.md
       - cp LICENSE docs/LICENSE.md
       - cat docs/index.md
