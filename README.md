@@ -1,4 +1,4 @@
-<div align="center">
+
 
 
 ![SimpliML](https://i.ibb.co/KWCTBQP/NameSml.png) 
@@ -11,7 +11,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0)
 
 <hr>
-</div>
+
 
 ## Project description
 **SimpliML** is a versatile machine learning library designed to be a one-stop solution for the entire data lifecycle. Whether you're preparing raw data or deploying advanced predictive models, *SimpliML* simplifies every step of the machine learning process.  
