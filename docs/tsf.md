@@ -20,12 +20,12 @@ dataDF, futureDF = tsf.generateTSData(sourceDF, format='%Y-%m', freq='MS', perio
 ```
 Parameters:-
 
-- format : str, optional
-  - Please refer [strftime-and-strptime-behavior](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)
-- freq : str, optional
-  - Please refer [timeseries-offset-aliases](https://pandas.pydata.org/docs/user_guide/timeseries.html#timeseries-offset-aliases)
-- periods : int, optional
-  - Forcasting time period
+  - format : str, optional
+    - Please refer [strftime-and-strptime-behavior](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)
+  - freq : str, optional
+    - Please refer [timeseries-offset-aliases](https://pandas.pydata.org/docs/user_guide/timeseries.html#timeseries-offset-aliases)
+  - periods : int, optional
+    - Forcasting time period
 
 #### Analysis Data
 ```python
@@ -41,19 +41,19 @@ mdlResult = tsf.runThreadModel(dataDF, futureDF, seasonal=12, modelApproach = 'F
 mdlResult = tsf.runProcessModel(dataDF, futureDF, seasonal=12, modelApproach = 'FAST', testSize=80) # Multiple Process (Process : CPU Count / 4) # Advise to use only in Windows  
 ```
 Parameters:-
-- seasonal : int, optional
-  - The number of periods in a complete seasonal cycle, 
-  - Example 
-    -  1 : Yearly data
-    -  2 : Half-yearly data
-    -  4 : Quarterly data 
-    -  7 : Daily data with a weekly cycle
-    - 52 : Weekly Data
-- modelApproach : ["BEST", "FAST"], optional
-  - BEST : Best model build with multiple permutation and combination
-  - FAST : Fast model build with limited permutation and combination
-- testSize : int, optional
-  - Test Size by defult 80:20 rule
+  - seasonal : int, optional
+    - The number of periods in a complete seasonal cycle, 
+    - Example 
+      -  1 : Yearly data
+      -  2 : Half-yearly data
+      -  4 : Quarterly data 
+      -  7 : Daily data with a weekly cycle
+      - 52 : Weekly Data
+  - modelApproach : ["BEST", "FAST"], optional
+    - BEST : Best model build with multiple permutation and combination
+    - FAST : Fast model build with limited permutation and combination
+  - testSize : int, optional
+    - Test Size by defult 80:20 rule
 
 
 #### Model Result Analysis
@@ -61,5 +61,5 @@ Parameters:-
 mdlOutPut = tsf.modelResult(dataDF, mdlResult, modelApproach='Best') 
 ```
 Parameters:-
-- modelApproach : str, optional
-  - BEST MAPE analysis report and can pass the model name, get the analysis report
+  - modelApproach : str, optional
+    - BEST MAPE analysis report and can pass the model name, get the analysis report
