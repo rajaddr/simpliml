@@ -6,5 +6,7 @@ site_description: ''
 theme:
    name: readthedocs
 nav:
-  - Home: index.md
+  - SimpliML: index.md
+  - Install: install.md
+  - Time Series: tsf.md
   - About: about.md
