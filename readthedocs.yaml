@@ -14,6 +14,7 @@ build:
       - sed "s/<div align='center'>//g;s/<\/div>//g" README.md > docs/index.md
       - cp CHANGELOG.md docs/CHANGELOG.md
       - cp LICENSE docs/LICENSE.md
+      - cat docs/index.md
 
 mkdocs:
   configuration: mkdocs.yml
