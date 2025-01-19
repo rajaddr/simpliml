@@ -3,7 +3,7 @@ site_dir: build_docs
 repo_url: https://github.com/rajaddr/simpliml
 
 theme:
-   name: readthedocs
+   name: mkdocs
 nav:
   - SimpliML: index.md
   - Installation: install.md
