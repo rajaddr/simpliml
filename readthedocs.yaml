@@ -10,14 +10,17 @@ build:
   tools:
     python: "3.12"
   jobs:
-    post_build:
-      - pwd
-      - ls -ltra
+    pre_build:
+      - ls -ltra docs/*
+      - cp README.md docs/
+      - cp CHANGELOG.md docs/
+      - cp LICENSE docs/
+      - ls -ltra docs/*
 
 mkdocs:
   configuration: mkdocs.yml
 
 # Optionally declare the Python requirements required to build your docs
-python:
-  install:
-  - requirements: docs/requirements.txt
+#python:
+#  install:
+#  - requirements: docs/requirements.txt
