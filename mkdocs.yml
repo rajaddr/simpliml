@@ -1,12 +1,12 @@
 site_name: SimpliML
 site_dir: build_docs
 repo_url: https://github.com/rajaddr/simpliml
-site_description: ''
 
 theme:
    name: readthedocs
 nav:
-  - SimpliML: index.md
+  - SimpliML: ../README.md
   - Installation: install.md
   - Time Series: tsf.md
-  - About: about.md
+  - Change Log: ../CHANGELOG.md
+  - License: ../LICENSE
