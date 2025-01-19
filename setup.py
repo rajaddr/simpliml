@@ -38,7 +38,7 @@ def get_about():
 with open('README.md', 'w') as f:
     f.write("""<div align="center">
 
-![SimpliML]({4}/tree/main/docs/Images/NameSml.png) 
+![SimpliML]({4}/tree/master/docs/Images/NameSml.png) 
 
 ![Python](https://img.shields.io/static/v1?label=Python&labelColor=007676&message={0}&color=01C0C0&style=flat&logoColor=01C0C0&logo=python)
 [![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message={1}&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/{1}/)
