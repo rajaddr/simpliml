@@ -5,8 +5,8 @@ repo_url: https://github.com/rajaddr/simpliml
 theme:
    name: readthedocs
 nav:
-  - SimpliML: ../README.md
+  - SimpliML: README.md
   - Installation: install.md
   - Time Series: tsf.md
-  - Change Log: ../CHANGELOG.md
-  - License: ../LICENSE
+  - Change Log: CHANGELOG.md
+  - License: LICENSE
