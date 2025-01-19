@@ -1,16 +1,15 @@
+<p align="center">
+  <img src="https://i.ibb.co/KWCTBQP/NameSml.png"/>
 
-
-
-![SimpliML](https://i.ibb.co/KWCTBQP/NameSml.png) 
-
-![Python](https://img.shields.io/static/v1?label=Python&labelColor=007676&message=>=3.9,<3.13&color=01C0C0&style=flat&logoColor=01C0C0&logo=python)
-[![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message=1.0.28&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/1.0.28/)
-![PyPI - Version](https://img.shields.io/pypi/v/simpliml?style=flat&labelColor=007676&color=01C0C0)
-![Package Status](https://img.shields.io/static/v1?label=Status&labelColor=007676&message=Planning&color=01C0C0&style=flat)
-[![License](https://img.shields.io/static/v1?label=License&labelColor=007676&message=MIT&color=01C0C0&style=flat)](https://github.com/rajaddr/simpliml/blob/master/LICENSE)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0)
-
+  ![Python](https://img.shields.io/static/v1?label=Python&labelColor=007676&message=>=3.9,<3.13&color=01C0C0&style=flat&logoColor=01C0C0&logo=python)
+  [![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message=1.0.28&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/1.0.28/)
+  ![PyPI - Version](https://img.shields.io/pypi/v/simpliml?style=flat&labelColor=007676&color=01C0C0)
+  ![Package Status](https://img.shields.io/static/v1?label=Status&labelColor=007676&message=Planning&color=01C0C0&style=flat)
+  [![License](https://img.shields.io/static/v1?label=License&labelColor=007676&message=MIT&color=01C0C0&style=flat)](https://github.com/rajaddr/simpliml/blob/master/LICENSE)
+  ![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0)
 <hr>
+</p>
+
 
 
 ## Project description
