@@ -11,7 +11,7 @@ build:
     python: "3.12"
   jobs:
     pre_build:
-      - sed 's/<div align="center">//g;s/<\/div>//g' README.md > docs/index.md
+      - sed "s/<div align='center'>//g;s/<\/div>//g" README.md > docs/index.md
       - cp CHANGELOG.md docs/CHANGELOG.md
       - cp LICENSE docs/LICENSE.md
 
