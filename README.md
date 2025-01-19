@@ -1,6 +1,6 @@
 <div align="center">
 
-![SimpliML](https://github.com/rajaddr/simpliml/tree/main/docs/Images/NameSml.png) 
+![SimpliML](https://github.com/rajaddr/simpliml/tree/master/docs/Images/NameSml.png) 
 
 ![Python](https://img.shields.io/static/v1?label=Python&labelColor=007676&message=>=3.9,<3.13&color=01C0C0&style=flat&logoColor=01C0C0&logo=python)
 [![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message=1.0.28&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/1.0.28/)
