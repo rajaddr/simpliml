@@ -41,6 +41,7 @@ mdlResult = tsf.runThreadModel(dataDF, futureDF, seasonal=12, modelApproach = 'F
 mdlResult = tsf.runProcessModel(dataDF, futureDF, seasonal=12, modelApproach = 'FAST', testSize=80) # Multiple Process (Process : CPU Count / 4) # Advise to use only in Windows  
 ```
 Parameters:-
+
   - seasonal : int, optional
     - The number of periods in a complete seasonal cycle, 
     - Example 
