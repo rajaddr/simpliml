@@ -12,7 +12,7 @@ url = "https://github.com/rajaddr/simpliml"
 docURL="https://simpliml.readthedocs.io/"
 keywords='Supervised Learning, Neural Networks, Reinforcement Learning, Gradient Descent, TensorFlow, Probability Distributions, PCA, Convex Optimization, Transformers, Bayesian Inference, Markov Chains, GANs, SVD, Entropy, Attention Mechanism'
 
-with open('LICENSE', 'w') as f:
+with open('docs/LICENSE', 'w') as f:
     f.write(license.find(licenseType).render(name=author, email=author_email))
 
 with open('simpliml/about.py', 'w') as f:

@@ -11,9 +11,8 @@ build:
     python: "3.12"
   jobs:
     post_build:
-      - cp ../README.md .
-      - cp ../CHANGELOG.md .
-      - cp ../LICENSE .
+      - pwd
+      - ls -ltra
 
 mkdocs:
   configuration: mkdocs.yml
