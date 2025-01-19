@@ -4,4 +4,4 @@ repo_url: https://github.com/rajaddr/simpliml
 site_description: ''
 
 theme:
-   name: readthedocs
+   name: material
