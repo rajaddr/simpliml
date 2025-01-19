@@ -11,6 +11,7 @@
 <hr>
 </div>
 
+
 ## Project description
 **SimpliML** is a versatile machine learning library designed to be a one-stop solution for the entire data lifecycle. Whether you're preparing raw data or deploying advanced predictive models, *SimpliML* simplifies every step of the machine learning process.  
 
