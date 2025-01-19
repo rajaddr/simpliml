@@ -73,8 +73,6 @@ with open('README.md', 'w') as f:
 
 Get started today and unlock the full potential of your data with **SimpliML**!  
 
-## Usage
-
 """.format(python_requires, version, status.split()[-1], licenseType, url))
 
 with open("README.md", "r", encoding="utf-8") as fh:

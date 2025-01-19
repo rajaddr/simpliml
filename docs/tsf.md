@@ -62,5 +62,6 @@ Parameters:-
 mdlOutPut = tsf.modelResult(dataDF, mdlResult, modelApproach='Best') 
 ```
 Parameters:-
+
   - modelApproach : str, optional
     - BEST MAPE analysis report and can pass the model name, get the analysis report
