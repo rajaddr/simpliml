@@ -25,7 +25,7 @@ def generateTSData(dataDF, format='%Y-%m-%d', freq='D', periods=30):
 
 def analysisData(dataDF):
     try:
-        if (dataDF.shape[1] == 2) & (dataDF.shape[0] > 1):
+        if (dataDF.shape[1] >= 1) & (dataDF.shape[0] > 1):
             return dataAnalysis().analysisData(dataDF)
         else:
             return -1
