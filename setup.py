@@ -47,6 +47,7 @@ with open('README.md', 'w') as f:
 [![License](https://img.shields.io/static/v1?label=License&labelColor=007676&message=MIT&color=01C0C0&style=flat)](https://github.com/rajaddr/simpliml/blob/master/LICENSE)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=pypi)
 [![Documentation Status](https://img.shields.io/readthedocs/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=readthedocs)](https://simpliml.readthedocs.io/en/latest/?badge=latest)
+![Test Coverage](https://img.shields.io/static/v1?label=TestCoverage&labelColor=007676&message=91%&color=01C0C0&style=flat&logoColor=01C0C0&logo=pytest)
 
 <hr>
 </div>
