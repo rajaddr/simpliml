@@ -4,4 +4,6 @@ warnings.filterwarnings("ignore")
 def test_add():
     sourceDF = pd.read_csv("tests/AirPassengers.csv")
     dataDF, futureDF = tsf.generateTSData(sourceDF, format='%Y-%m', freq='MS', periods=30)
-    #mdlResult = tsf.runModel(dataDF, futureDF, seasonal=12, modelApproach='FAST', testSize=80)
+    tsf.analysisData(dataDF)
+    mdlResult = tsf.runModel(dataDF, futureDF, seasonal=12, modelApproach='FAST', testSize=80)
+    mdlOutPut = tsf.modelResult(dataDF, mdlResult, modelApproach='Best')
