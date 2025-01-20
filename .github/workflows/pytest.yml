@@ -26,8 +26,3 @@ jobs:
           pytest --cov --cov-report json
           python -c "import json, pandas as pd;y1=pd.read_json('coverage.json').reset_index(); print({'schemaVersion': 1, 'label': 'Test Coverage', 'message' : int((y1[y1['index']=='percent_covered_display']['totals'].values)[0])})" > code_coverage.json
           cat code_coverage.json
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path--to-lcov: code_coverage.json
