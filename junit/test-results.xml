@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="6.519" timestamp="2025-01-20T15:13:32.522133+05:30" hostname="Raja-New"><testcase classname="tests.test_run" name="test_add" time="0.077" /></testsuite></testsuites>
