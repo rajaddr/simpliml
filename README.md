@@ -1,13 +1,15 @@
 <p align="center">
 <img src="https://i.ibb.co/KWCTBQP/NameSml.png"/>
-</p><div align='center'>
+</p><div align="center">
 
-![Python](https://img.shields.io/static/v1?label=Python&labelColor=007676&message=>=3.9,<3.13&color=01C0C0&style=flat&logoColor=01C0C0&logo=python)
+![Python](https://img.shields.io/pypi/pyversions/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=python)
 [![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message=1.0.29&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/1.0.29/)
-![PyPI - Version](https://img.shields.io/pypi/v/simpliml?style=flat&labelColor=007676&color=01C0C0)
+![PyPI - Version](https://img.shields.io/pypi/v/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=pypi)
 ![Package Status](https://img.shields.io/static/v1?label=Status&labelColor=007676&message=Planning&color=01C0C0&style=flat)
 [![License](https://img.shields.io/static/v1?label=License&labelColor=007676&message=MIT&color=01C0C0&style=flat)](https://github.com/rajaddr/simpliml/blob/master/LICENSE)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=pypi)
+[![Documentation Status](https://img.shields.io/readthedocs/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=readthedocs)](https://simpliml.readthedocs.io/en/latest/?badge=latest)
+
 <hr>
 </div>
 
@@ -34,4 +36,8 @@
 ***SimpliML*** is designed for data scientists, ML engineers, and enthusiasts who need a reliable, efficient, and easy-to-use toolkit for managing the entire machine learning workflow.  
 
 Get started today and unlock the full potential of your data with **SimpliML**!  
+
+
+## Documentation
+The official documentation is hosted on [Click Here](https://simpliml.readthedocs.io/).
 
