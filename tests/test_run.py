@@ -20,7 +20,7 @@ def test_add():
     mdlResult3 = tsf.runProcessModel(dataDF, futureDF, seasonal=12, modelApproach='FAST', testSize=80)
     mdlOutPut = tsf.modelResult(dataDF, mdlResult, modelApproach='Best')
     mdlOutPut1 = tsf.modelResult(dataDF, mdlResult, modelApproach='HOLT')
-    dataDF, futureDF = tsf.generateTSData(sourceDF.head(25), format='%Y-%m', freq='MS', periods=30)
+    dataDF, futureDF = tsf.generateTSData(sourceDF.tail(10), format='%Y-%m', freq='MS', periods=3)
     tsf.analysisData(dataDF)
     mdlResult = tsf.runModel(dataDF, futureDF, seasonal=12, modelApproach='FAST', testSize=80)
     mdlResult1 = tsf.buildModel(dataDF, futureDF, seasonal=12, modelApproach='BEST', testSize=80)
@@ -28,3 +28,4 @@ def test_add():
     mdlResult3 = tsf.runProcessModel(dataDF, futureDF, seasonal=12, modelApproach='FAST', testSize=80)
     mdlOutPut = tsf.modelResult(dataDF, mdlResult, modelApproach='Best')
     mdlOutPut1 = tsf.modelResult(dataDF, mdlResult, modelApproach='HOLT')
+    mdlOutPut = tsf.modelResult(dataDF, mdlResult.head(0), modelApproach='Best')

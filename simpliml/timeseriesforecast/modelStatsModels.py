@@ -362,7 +362,3 @@ class modelStatsModels:
             print(e)
 
         return rtVal
-
-
-if __name__ == '__main__':
-    print("Main")
