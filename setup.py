@@ -1,7 +1,7 @@
 import setuptools, os, datetime, license
 
 pckName = "simpliml"
-version = "1.0.32"
+version = "1.2.0"
 python_requires=">=3.9,<3.13"
 author = "Dharmaraj D"
 status = "Development Status :: 1 - Planning"
@@ -41,7 +41,7 @@ with open('README.md', 'w') as f:
 </p><div align="center">
 
 ![Python](https://img.shields.io/pypi/pyversions/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=python)
-[![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message=1.0.29&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/1.0.29/)
+[![Version](https://img.shields.io/static/v1?label=Version&labelColor=007676&message={1}&color=01C0C0&style=flat)](https://pypi.org/project/simpliml/{1}/)
 ![PyPI - Version](https://img.shields.io/pypi/v/simpliml?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=pypi)
 ![Package Status](https://img.shields.io/static/v1?label=Status&labelColor=007676&message=Planning&color=01C0C0&style=flat)
 [![License](https://img.shields.io/static/v1?label=License&labelColor=007676&message=MIT&color=01C0C0&style=flat)](https://github.com/rajaddr/simpliml/blob/master/LICENSE)
