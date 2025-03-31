@@ -1,4 +1,7 @@
 
+## 1.3.0 
+  - Removing auto_arima (pmdarima)
+
 ## 1.2.0 
   - Adding Documentation
   - Adding pytest

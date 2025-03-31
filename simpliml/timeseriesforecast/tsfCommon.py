@@ -9,7 +9,7 @@ from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from statsmodels.tsa.vector_ar.var_model import VAR
 from statsmodels.tsa.statespace.varmax import VARMAX
-from pmdarima.arima import auto_arima
+#from pmdarima.arima import auto_arima
 
 threadCount = os.cpu_count() * 2
 processCount = 1 if os.cpu_count() == 1 else round(os.cpu_count() / 4)

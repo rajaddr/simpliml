@@ -1,6 +1,5 @@
 pandas
-numpy==1.26.4
-pmdarima
+#pmdarima
 scipy
 scikit-learn
 statsmodels

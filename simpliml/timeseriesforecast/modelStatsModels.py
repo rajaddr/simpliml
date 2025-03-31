@@ -3,8 +3,7 @@ from .tsfCommon import *
 
 class modelStatsModels:
     __all__ = ['modelHoltWinters', 'modelHolt', 'modelSimpleExpSmoothing', 'modelAutoRegression', 'modelMovingAverage',
-               'modelARMA', 'modelARIMA', 'modelSARIMA', 'modelSARIMAX', 'modelVARMAX', 'modelVARMA',
-               'modelAutoARIMA']  # 'modelVAR'
+               'modelARMA', 'modelARIMA', 'modelSARIMA', 'modelSARIMAX', 'modelVARMAX', 'modelVARMA']  # 'modelVAR' , 'modelAutoARIMA'
 
     def sarimaxSesOrder(self, y, seasonal):
         p = d = q = range(0, 2);

@@ -1,7 +1,7 @@
 import setuptools, os, datetime, license
 
 pckName = "simpliml"
-version = "1.2.0"
+version = "1.1.33"
 python_requires=">=3.9,<3.13"
 author = "Dharmaraj D"
 status = "Development Status :: 1 - Planning"
