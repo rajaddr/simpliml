@@ -1,9 +1,9 @@
 import json
 
 version_json = '''{
-    "__date__": "2025-03-31 17:13:13.060208",
+    "__date__": "2025-03-31 17:22:52.298475",
     "__author__": "Dharmaraj D",
-    "__version__": "1.1.33",
+    "__version__": "1.3.0",
     "__email__": "rajaddr@gmail.com",
     "__description__": "Machine Learning, Artificial Intelligence, Mathematics",
     "__keywords__": "Supervised Learning, Neural Networks, Reinforcement Learning, Gradient Descent, TensorFlow, Probability Distributions, PCA, Convex Optimization, Transformers, Bayesian Inference, Markov Chains, GANs, SVD, Entropy, Attention Mechanism",
