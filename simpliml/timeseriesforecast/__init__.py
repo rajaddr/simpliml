@@ -65,10 +65,10 @@ def runProcessModel(dataDF, furDF, seasonal=7, modelApproach='BEST', testSize=80
         return -1
 
 
-def buildModel(dataDF, furDF, seasonal=7, modelApproach='BEST', testSize=80, runType='Single'):
+def buildModel(dataDF, furDF, seasonal=7, modelApproach='BEST', testSize=80, runType='Single', logVar=''):
     try:
         if (dataDF.shape[0] > 1) & (furDF.shape[0] >= 1):
-            return dataModeling().buildModel(dataDF, furDF, seasonal, modelApproach.upper(), testSize / 100, runType)
+            return dataModeling().buildModel(dataDF, furDF, seasonal, modelApproach.upper(), testSize / 100, runType, logVar)
         else:
             print(dataDF.shape[0], furDF.shape[0])
             return -1

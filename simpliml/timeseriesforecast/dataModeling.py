@@ -7,18 +7,18 @@ from .modelPyTorch import *
 
 
 class dataModeling:
-    def submitModel(self, modelName, seasonal, modelApproach, x_train, x_test, y_train, y_test, furDF):
+    def submitModel(self, modelName, seasonal, modelApproach, x_train, x_test, y_train, y_test, furDF, logVar=''):
         try:
-            logging.info("Model Running :: {0}".format(modelName))
+            logging.getLogger(logVar).info("Model Running :: {0}".format(modelName))
             start_time = time.time()
             return [eval(modelName + "(seasonal, x_train, x_test, y_train, y_test, furDF, modelApproach)")[0] + [
                 (time.time() - start_time)]]
         except Exception as e:
             print(e)
         finally:
-            logging.info("Model Completed :: {0}".format(modelName))
+            logging.getLogger(logVar).info("Model Completed :: {0}".format(modelName))
 
-    def buildModel(self, dataDF, furDF, seasonal, modelApproach, testSize, runType):
+    def buildModel(self, dataDF, furDF, seasonal, modelApproach, testSize, runType, logVar=''):
         try:
             columnsName = ['Library', 'Model', 'Status', 'MAE', 'MSE', 'RMSE', 'RMSLE', 'MAPE', 'R2', 'SMAPE', 'MFE',
                            'NMSE', 'THEIL_U_STATISTIC', 'Test', 'Predict', 'TT']
@@ -43,17 +43,17 @@ class dataModeling:
 
             start_time = datetime.datetime.now()
             if runType.lower() == "process":
-                logging.info("Process Count :: {0}".format(processCount))
+                logging.getLogger(logVar).info("Process Count :: {0}".format(processCount))
                 with futures.ProcessPoolExecutor(max_workers=processCount) as furExec:
                     result = [furExec.map(self.submitModel, mList, itertools.repeat(seasonal),
                                           itertools.repeat(modelApproach), itertools.repeat(x_train),
                                           itertools.repeat(x_test), itertools.repeat(y_train), itertools.repeat(y_test),
-                                          itertools.repeat(furDF.drop('Data', axis=1)))]
+                                          itertools.repeat(furDF.drop('Data', axis=1)), logVar)]
                     for mainRt in result:
                         for valRt in mainRt:
                             dataVal = dataVal + valRt
             else:
-                logging.info("Thread Count :: {0}".format(threadCount if runType.lower() == "thread" else 1))
+                logging.getLogger(logVar).info("Thread Count :: {0}".format(threadCount if runType.lower() == "thread" else 1))
                 with futures.ThreadPoolExecutor(
                         max_workers=threadCount if runType.lower() == "thread" else 1) as furExec:
                     result = [furExec.map(self.submitModel, mList, itertools.repeat(seasonal),
@@ -64,7 +64,7 @@ class dataModeling:
                         for valRt in mainRt:
                             dataVal = dataVal + valRt
 
-            logging.info("Total Model Runtime {0} - {1} [ {2} ] ".format(start_time, datetime.datetime.now(),
+            logging.getLogger(logVar).info("Total Model Runtime {0} - {1} [ {2} ] ".format(start_time, datetime.datetime.now(),
                                                                          (datetime.datetime.now() - start_time)))
 
             return pd.DataFrame(dataVal, columns=columnsName)

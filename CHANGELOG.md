@@ -1,4 +1,8 @@
 
+## 1.4.0 
+  - Fixing min/max date in generateTSData
+  - Adding logging.getLogger function in dataModeling
+
 ## 1.3.0 
   - Removing auto_arima (pmdarima)
 

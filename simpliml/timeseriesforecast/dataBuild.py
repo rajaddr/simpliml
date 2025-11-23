@@ -32,6 +32,8 @@ class dataBuild:
     def generateTSData(self, dataDF, format, freq, periods):
         try:
             dataDF.columns = ['Date', 'Data']
+            dataDF['Date'] = pd.to_datetime(dataDF['Date'], format=format, errors='ignore')
+            dataDF['Date'] = dataDF['Date'].dt.strftime(format)
             minDate = min(dataDF.Date)
             maxDate = max(dataDF.Date)
             dataSeq = pd.DataFrame(pd.date_range(minDate, maxDate, freq=freq), columns=['Date'])
@@ -40,8 +42,6 @@ class dataBuild:
                     drop=True)['Date'])
             dataFur = pd.DataFrame(pd.date_range(maxDateNew, periods=periods, freq=freq), columns=['Date']).reset_index(
                 drop=True)
-            dataDF['Date'] = pd.to_datetime(dataDF['Date'], format=format, errors='ignore')
-            dataDF['Date'] = dataDF['Date'].dt.strftime(format)
             dataSeq['Date'] = dataSeq['Date'].dt.strftime(format)
             dataFur['Date'] = dataFur['Date'].dt.strftime(format)
             dataSet = pd.merge(dataDF, dataSeq, how="right", on=["Date"]).reset_index(drop=True)
