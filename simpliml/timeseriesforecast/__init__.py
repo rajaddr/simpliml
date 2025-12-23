@@ -1,4 +1,5 @@
 from ..about import get_about
+import sys
 
 __date__ = get_about()['__date__']
 __author__ = get_about()['__author__']
@@ -31,6 +32,7 @@ def analysisData(dataDF):
             return -1
     except:
         return -1
+
 
 def runModel(dataDF, furDF, seasonal=7, modelApproach='BEST', testSize=80):
     try:
@@ -83,3 +85,8 @@ def modelResult(dataDF, mdlResult, modelApproach='Best'):
             return -1
     except:
         return -1
+
+# Ensure importlib.import_module('simpliml.timeseriesforecast.__init__') returns
+# the same module object so tests that target that dotted name can patch
+# attributes (e.g. dataModeling) normally. Register the dotted name in sys.modules.
+sys.modules[__name__ + '.__init__'] = sys.modules[__name__]
