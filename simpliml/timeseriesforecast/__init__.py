@@ -33,7 +33,6 @@ def analysisData(dataDF):
     except:
         return -1
 
-
 def runModel(dataDF, furDF, seasonal=7, modelApproach='BEST', testSize=80):
     try:
         if (dataDF.shape[0] > 1) & (furDF.shape[0] >= 1):
@@ -85,8 +84,3 @@ def modelResult(dataDF, mdlResult, modelApproach='Best'):
             return -1
     except:
         return -1
-
-# Ensure importlib.import_module('simpliml.timeseriesforecast.__init__') returns
-# the same module object so tests that target that dotted name can patch
-# attributes (e.g. dataModeling) normally. Register the dotted name in sys.modules.
-sys.modules[__name__ + '.__init__'] = sys.modules[__name__]
