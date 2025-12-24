@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://i.ibb.co/KWCTBQP/NameSml.png"/>
+<img src="https://i.ibb.co/cKFYB1xq/Simpli-ML.png"/>
 </p><div align="center">
 
 ![Python](https://img.shields.io/pypi/pyversions/simpliml/1.4.0?style=flat&labelColor=007676&color=01C0C0&logoColor=01C0C0&logo=python)
