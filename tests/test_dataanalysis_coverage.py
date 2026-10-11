@@ -35,7 +35,7 @@ def test_dataanalysis_execution_and_modelresult_every_branch():
     da = importlib.import_module('simpliml.timeseriesforecast.dataAnalysis')
 
     df = pd.DataFrame({
-        'Date': pd.date_range('2021-01', periods=12, freq='M').astype(str),
+        'Date': pd.date_range('2021-01', periods=12, freq='ME').astype(str),
         'Data': [100, 101, 99, 102, 104, 103, 105, 107, 106, 108, 110, 109],
     })
 
@@ -189,7 +189,7 @@ def test_dataanalysis_analysis_plots_execute():
     
     # Create proper data
     df = pd.DataFrame({
-        'Date': pd.date_range('2021-01', periods=24, freq='M'),
+        'Date': pd.date_range('2021-01', periods=24, freq='ME'),
         'Data': np.sin(np.linspace(0, 4*np.pi, 24)) * 50 + 100
     })
     df['Date'] = df['Date'].astype(str)
@@ -589,4 +589,3 @@ def _mock_alt_chart():
     chart.configure_header.return_value = chart
     chart.transform_filter.return_value = chart
     return chart
-

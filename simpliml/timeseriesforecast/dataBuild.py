@@ -51,7 +51,7 @@ class dataBuild:
             dataDF.columns = ['Date', 'Data']
             
             # Convert and format dates once
-            dataDF['Date'] = pd.to_datetime(dataDF['Date'], format=format, errors='ignore')
+            dataDF['Date'] = pd.to_datetime(dataDF['Date'], format=format)
             minDate = dataDF['Date'].min()
             maxDate = dataDF['Date'].max()
             
