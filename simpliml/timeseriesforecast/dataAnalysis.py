@@ -22,15 +22,29 @@ class dataAnalysis:
     def analysisData(self, dfPass):
         try:
             df = dfPass.copy()
-            df['Data'] = df['Data'].fillna(df['Data'].mean())
-            allData = df[df['Data'] != 0]['Data'].values
+            # Fill NaN values once
+            mean_val = df['Data'].mean()
+            df['Data'] = df['Data'].fillna(mean_val)
+            
+            # Filter non-zero values once
+            non_zero_mask = df['Data'] != 0
+            allData = df.loc[non_zero_mask, 'Data'].values
+            
+            # Calculate log data
             logData = np.log(allData)
+            
+            # Run statistical tests
             adfAllRst = adfuller(allData)
             adfLogRst = adfuller(logData)
             is_norm = jb(logData)
-            df['logData'] = np.log(df[df['Data'] != 0]['Data'])
-            df['rolmean'] = pd.Series(df['Data']).rolling(window=12).mean()
-            df['rolstd'] = pd.Series(df['Data']).rolling(window=12).std()
+            
+            # Add features efficiently
+            df['logData'] = np.where(non_zero_mask, logData, np.nan)
+            
+            # Use optimized rolling calculations
+            data_series = df['Data']
+            df['rolmean'] = data_series.rolling(window=12, min_periods=1).mean()
+            df['rolstd'] = data_series.rolling(window=12, min_periods=1).std()
 
             newDF = df[['Date', 'Data']].set_index('Date')
             print(newDF.describe().transpose())
@@ -40,20 +54,23 @@ class dataAnalysis:
             print("p value : {0}, Series is {1}".format(is_norm[1].round(5),
                                                         "Normal" if (is_norm[1] > 0.05) else "Non-Normal"))
 
+            # Cache common altair properties
+            common_props = dict(width=self.graphWidth, height=self.graphHeight)
+            color_props = dict(opacity=alt.value(self.opacityVal),
+                              strokeOpacity=alt.value(self.strokeOpacityVal),
+                              color=alt.value("#01C0C0"))
+            
             mC1 = alt.Chart(df, title="Data Series With Rolling Mean").mark_line(point=alt.OverlayMarkDef()).encode(
                 x='Date', y='Data',
                 tooltip=['Date', 'Data'],
-                opacity=alt.value(self.opacityVal),
-                strokeOpacity=alt.value(self.strokeOpacityVal),
-                color=alt.value("#01C0C0")
+                **color_props
             )
             mA1 = alt.Chart(df).mark_trail(size=1, color='red').encode(
                 x='Date', y='rolmean',
                 size='Data'
             )
-            mT1 = mC1.mark_text(align='left', baseline='top', dx=5).encode(text='Data:Q')
 
-            (mC1 + mA1).properties(width=self.graphWidth, height=self.graphHeight).interactive().display()
+            (mC1 + mA1).properties(**common_props).interactive().display()
 
             mC2 = alt.Chart(df, title="Sub Series").mark_line(point=alt.OverlayMarkDef()).encode(
                 x='quarter(Date)',
@@ -68,9 +85,11 @@ class dataAnalysis:
             )
             (mC2).properties(width=80, height=self.graphHeight).interactive().display()
 
+            # Cache DatetimeIndex conversion
+            year_index = pd.DatetimeIndex(df['Date']).year
             fig, ax = plt.subplots(figsize=(12, 8))
-            sns.boxplot(data=df, x=pd.DatetimeIndex(df['Date']).year, y='Data', ax=ax, boxprops=dict(alpha=.3))
-            sns.swarmplot(data=df, x=pd.DatetimeIndex(df['Date']).year, y='Data')
+            sns.boxplot(data=df, x=year_index, y='Data', ax=ax, boxprops=dict(alpha=.3))
+            sns.swarmplot(data=df, x=year_index, y='Data')
             plt.show()
 
             mC3 = alt.Chart(df, title="Quarterly Trends").mark_line(point=alt.OverlayMarkDef()).encode(
@@ -91,22 +110,20 @@ class dataAnalysis:
                 y='year(Date):N',
                 color=alt.Color('quarter(Date)', scale=alt.Scale(scheme='category10')),
                 tooltip=["Date", "Data"])
-            (mC4).properties(width=self.graphWidth, height=self.graphHeight).interactive().display()
+            (mC4).properties(**common_props).interactive().display()
 
             mC5 = alt.Chart(df, title="Sum by each Quarter").mark_bar(point=alt.OverlayMarkDef()).encode(
                 x=alt.X('sum(Data)', stack='normalize'),
                 y='year(Date):N',
                 color=alt.Color('quarter(Date)', scale=alt.Scale(scheme='category10')),
                 tooltip=["Date", "Data"])
-            (mC5).properties(width=self.graphWidth, height=self.graphHeight).interactive().display()
+            (mC5).properties(**common_props).interactive().display()
 
             alt.Chart(df, title="White Noise").mark_line(point=alt.OverlayMarkDef()).encode(
                 x='Date', y='Data',
                 tooltip=[alt.Tooltip('Data'), alt.Tooltip('Date')],
-                opacity=alt.value(self.opacityVal),
-                strokeOpacity=alt.value(self.strokeOpacityVal),
-                color=alt.value("#01C0C0")
-            ).properties(width=self.graphWidth, height=self.graphHeight).add_selection(
+                **color_props
+            ).properties(**common_props).add_selection(
                 alt.selection_interval(bind='scales')).display()
 
             alt.Chart(df, title="Log Histogram").mark_bar(filled=True).encode(
@@ -115,7 +132,7 @@ class dataAnalysis:
                 strokeOpacity=alt.value(self.strokeOpacityVal),
                 tooltip=[alt.Tooltip('logData'), alt.Tooltip('count()')],
                 color=alt.value("#01C0C0")
-            ).properties(width=self.graphWidth, height=self.graphHeight).display()
+            ).properties(**common_props).display()
 
             alt.Chart(df, title="Log Line Plot").mark_line(point=alt.OverlayMarkDef()).encode(
                 x='Date', y='logData',
@@ -123,7 +140,7 @@ class dataAnalysis:
                 strokeOpacity=alt.value(self.strokeOpacityVal),
                 tooltip=[alt.Tooltip('logData'), alt.Tooltip('Date')],
                 color=alt.value("#01C0C0")
-            ).properties(width=self.graphWidth, height=self.graphHeight).display()
+            ).properties(**common_props).display()
 
             plt.rcParams.update({'figure.figsize': (20, 12)})
             seasonal_decompose(newDF, model='additive', period=1).plot().suptitle('nAdditive Decompose')
@@ -141,17 +158,25 @@ class dataAnalysis:
 
     def modelResult(self, dataDF, mdlResult, modelApproach):
         try:
+            # Use vectorized operations for filtering
             if modelApproach.upper() == 'BEST':
-                bestData = mdlResult[mdlResult['MAPE'] == mdlResult['MAPE'][mdlResult['Status'] == True].min()]
+                mask = mdlResult['Status'] == True
+                min_mape = mdlResult.loc[mask, 'MAPE'].min()
+                bestData = mdlResult[mdlResult['MAPE'] == min_mape]
             else:
                 bestData = mdlResult[mdlResult['Model'] == modelApproach]
+            
+            # Efficiently build dataframes
             dataTest = pd.DataFrame(bestData['Test'].values[0], columns=['Date', 'Data'])
             dataTest['Value'] = 'Test'
+            
             datafur = pd.DataFrame(bestData['Predict'].values[0], columns=['Date', 'Data'])
             datafur['Value'] = 'Forecast'
+            
             dataOrg = dataDF.reset_index()[['Date', 'Data']]
             dataOrg['Value'] = 'Data'
-            source = pd.concat([dataTest, datafur, dataOrg], axis=0)
+            
+            source = pd.concat([dataTest, datafur, dataOrg], axis=0, ignore_index=True)
 
             nearest = alt.selection(type='single', nearest=True, on='mouseover',
                                     fields=['Date'], empty='none')
@@ -185,15 +210,23 @@ class dataAnalysis:
             ).transform_filter(
                 nearest
             )
-            dataValue = pd.concat([dataDF.reset_index()[['Date', 'Data']].set_index('Date'),
-                                   pd.DataFrame(bestData['Test'].values[0], columns=['Date', 'Test']).set_index('Date'),
-                                   pd.DataFrame(bestData['Predict'].values[0], columns=['Date', 'Forecast']).set_index(
-                                       'Date')], axis=1).fillna(0).reset_index()
+            
+            # Build combined dataframe more efficiently
+            test_df = pd.DataFrame(bestData['Test'].values[0], columns=['Date', 'Test']).set_index('Date')
+            pred_df = pd.DataFrame(bestData['Predict'].values[0], columns=['Date', 'Forecast']).set_index('Date')
+            dataValue = pd.concat(
+                [dataDF.reset_index()[['Date', 'Data']].set_index('Date'),
+                 test_df, pred_df],
+                axis=1
+            ).fillna(0).reset_index()
+            
             dataSt = bestData[
                 ['Model', 'MAE', 'MSE', 'RMSE', 'RMSLE', 'MAPE', 'R2', 'SMAPE', 'MFE', 'NMSE', 'THEIL_U_STATISTIC']]
             table = [dataSt.columns.values.tolist()] + dataSt.sort_values('MAPE').values.tolist()
+            
+            # Calculate column widths more efficiently
             longest_cols = [
-                (max([len(str(row[i])) for row in table]) + 2)
+                (max((len(str(row[i])) for row in table), default=0) + 2)
                 for i in range(len(table[0]))
             ]
 

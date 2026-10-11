@@ -17,29 +17,60 @@ processCount = 1 if os.cpu_count() == 1 else round(os.cpu_count() / 4)
 
 class tsfCommon:
     def modelEval(self, y, predictions):
+        """
+        Optimized evaluation metrics calculation using vectorized operations.
+        """
         roundVal = 3
+        
+        # Forward fill and backward fill only once
         y = y.bfill().ffill()
         predictions = predictions.bfill().ffill()
-        mae = mean_absolute_error(y, predictions)
-        mse = mean_squared_error(y, predictions)
-        SMAPE = np.mean(np.abs((y - predictions) / ((y + predictions) / 2))) * 100
-        rmse = np.sqrt(mean_squared_error(y, predictions))
-        MAPE = np.mean(np.abs((y - predictions) / y)) * 100
-        mfe = np.mean(y - predictions)
-        NMSE = mse / (np.sum((y - np.mean(y)) ** 2) / (len(y) - 1))
-        error = y - predictions
-        mfe = np.sqrt(np.mean(predictions ** 2))
-        mse = np.sqrt(np.mean(y ** 2))
-        rmse = np.sqrt(np.mean(error ** 2))
-        theil_u_statistic = rmse / (mfe * mse)
-        r2 = r2_score(y, predictions)
-        RMSLE = mean_squared_log_error(y, predictions, multioutput='raw_values')[0]
+        
+        # Convert to numpy for vectorized operations
+        y_np = np.asarray(y, dtype=float)
+        pred_np = np.asarray(predictions, dtype=float)
+        
+        # Calculate differences once
+        diff = y_np - pred_np
+        abs_diff = np.abs(diff)
+        
+        # Vectorized calculations
+        mae = np.mean(abs_diff)
+        mse = np.mean(diff ** 2)
+        rmse = np.sqrt(mse)
+        
+        # SMAPE: Symmetric Mean Absolute Percentage Error
+        denominator = np.abs(y_np) + np.abs(pred_np)
+        smape = np.mean(np.where(denominator != 0, 2 * abs_diff / denominator, 0)) * 100
+        
+        # MAPE: Mean Absolute Percentage Error
+        mape = np.mean(np.where(y_np != 0, abs_diff / np.abs(y_np), 0)) * 100
+        
+        # MFE: Mean Forecast Error
+        mfe = np.mean(diff)
+        
+        # NMSE: Normalized Mean Squared Error
+        y_mean = np.mean(y_np)
+        nmse = mse / (np.sum((y_np - y_mean) ** 2) / (len(y_np) - 1)) if len(y_np) > 1 else 0
+        
+        # Theil U Statistic
+        rmse_error = np.sqrt(np.mean(diff ** 2))
+        pred_rms = np.sqrt(np.mean(pred_np ** 2))
+        y_rms = np.sqrt(np.mean(y_np ** 2))
+        theil_u_statistic = rmse_error / (pred_rms * y_rms) if (pred_rms * y_rms) != 0 else 0
+        
+        # R² Score
+        r2 = r2_score(y_np, pred_np)
+        
+        # RMSLE: Root Mean Squared Log Error
+        rmsle = mean_squared_log_error(y_np, pred_np, multioutput='raw_values')[0]
 
-        return [round(mae, roundVal), round(mse, roundVal), round(rmse, roundVal), round(RMSLE, roundVal),
-                round(MAPE, roundVal), round(r2, roundVal),
-                round(SMAPE, roundVal), round(mfe, roundVal),
-                round(NMSE, roundVal), round(theil_u_statistic, roundVal)]
+        return [round(mae, roundVal), round(mse, roundVal), round(rmse, roundVal), round(rmsle, roundVal),
+                round(mape, roundVal), round(r2, roundVal),
+                round(smape, roundVal), round(mfe, roundVal),
+                round(nmse, roundVal), round(theil_u_statistic, roundVal)]
 
     def getTrainTest(self, dataDF, testSize):
-        train_size = int(len(dataDF) * (testSize))
-        return dataDF[0:train_size], dataDF[train_size:]
+        """Split data into train and test sets efficiently."""
+        train_size = int(len(dataDF) * testSize)
+        return dataDF[:train_size], dataDF[train_size:]

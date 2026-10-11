@@ -1,67 +1,174 @@
-# Time Series
-- **Pre-built Models:** Includes popular time series forecasting models like ARIMA, SARIMA, torch, and more.
-- **Seamless Integration:** Load data, preprocess, and run forecasting models in one place.
-- **Automatic Forecasting:** Automatically generates forecasts for future time steps once a model is selected.
-- **Visualization:** Built-in tools for visualizing both historical data and forecasted values.
-- **Customizable:** Fine-tune model parameters to suit your specific use case.
-- **Extensive Documentation:** Detailed guides and examples to help you get started.
+# Time-series forecasting
 
+SimpliML provides a complete workflow for preparing time-series data, reviewing
+its statistical characteristics, running several forecasting models, and
+visualizing model results.
 
-#### Import SimpliML Time Series
+## Import the time-series API
+
 ```python
 import pandas as pd
 import simpliml.timeseriesforecast as tsf
 ```
 
-#### Build Time Series Data
+## Prepare the input data
+
+`generateTSData` expects a two-column `DataFrame`. The first column is parsed as
+the date and the second column is the numeric target series. The returned
+frames contain the historical data and the requested future dates.
+
 ```python
-sourceDF = pd.read_csv("") # Any Input data read
-dataDF, futureDF = tsf.generateTSData(sourceDF, format='%Y-%m', freq='MS', periods=30)
+source_df = pd.DataFrame({
+    "Date": ["2021-01", "2021-02", "2021-03", "2021-04"],
+    "Data": [100, 110, 105, 115],
+})
+
+data_df, future_df = tsf.generateTSData(
+    source_df,
+    format="%Y-%m",
+    freq="MS",
+    periods=6,
+)
 ```
-Parameters:-
 
-  - format : str, optional
-    - Please refer [strftime-and-strptime-behavior](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)
-  - freq : str, optional
-    - Please refer [timeseries-offset-aliases](https://pandas.pydata.org/docs/user_guide/timeseries.html#timeseries-offset-aliases)
-  - periods : int, optional
-    - Forcasting time period
+| Parameter | Description |
+| --- | --- |
+| `dataDF` | Two-column input frame: date and target value. |
+| `format` | Python date format used to parse and format dates. See the [strftime documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior). |
+| `freq` | Pandas date frequency, such as `D`, `MS`, or `QS`. See [pandas offset aliases](https://pandas.pydata.org/docs/user_guide/timeseries.html#timeseries-offset-aliases). |
+| `periods` | Number of future periods to generate. |
 
-#### Analysis Data
+For reliable model training, use a regular frequency and enough historical
+observations for the selected seasonal cycle.
+
+## Analyze the time series
+
+`analysisData` calculates summary statistics and displays interactive Altair
+charts and statistical plots. Run it in an environment that supports plotting,
+such as Jupyter Notebook, JupyterLab, or another graphical Python session.
+
 ```python
-tsf.analysisData(dataDF) # This will work only in interactive computational environment like Jupyter Notebook/lab/hub ..etc 
+tsf.analysisData(data_df)
 ```
 
-#### Build Model and forcast
+The input must contain at least two rows and a `Data` column. The function
+returns `-1` for invalid input.
+
+## Train forecasting models
+
+Use one of the following functions:
+
 ```python
-mdlResult = tsf.runModel(dataDF, futureDF, seasonal=12, modelApproach = 'FAST', testSize=80)  # Single Process Thread
-(OR)
-mdlResult = tsf.runThreadModel(dataDF, futureDF, seasonal=12, modelApproach = 'FAST', testSize=80) # Single Process Multiple Thread (Thread : CPU Count * 2)
-(OR)
-mdlResult = tsf.runProcessModel(dataDF, futureDF, seasonal=12, modelApproach = 'FAST', testSize=80) # Multiple Process (Process : CPU Count / 4) # Advise to use only in Windows  
+# One worker
+result_df = tsf.runModel(
+    data_df,
+    future_df,
+    seasonal=12,
+    modelApproach="FAST",
+    testSize=80,
+)
+
+# Multiple threads
+result_df = tsf.runThreadModel(
+    data_df,
+    future_df,
+    seasonal=12,
+    modelApproach="FAST",
+    testSize=80,
+)
+
+# Multiple processes; use this entry point carefully on Windows
+result_df = tsf.runProcessModel(
+    data_df,
+    future_df,
+    seasonal=12,
+    modelApproach="FAST",
+    testSize=80,
+)
 ```
-Parameters:-
 
-  - seasonal : int, optional
-    - The number of periods in a complete seasonal cycle, 
-    - Example 
-      -  1 : Yearly data
-      -  2 : Half-yearly data
-      -  4 : Quarterly data 
-      -  7 : Daily data with a weekly cycle
-      - 52 : Weekly Data
-  - modelApproach : ["BEST", "FAST"], optional
-    - BEST : Best model build with multiple permutation and combination
-    - FAST : Fast model build with limited permutation and combination
-  - testSize : int, optional
-    - Test Size by defult 80:20 rule
+`buildModel` provides the same workflow with an explicit execution mode and
+optional logger name:
 
-
-#### Model Result Analysis
 ```python
-mdlOutPut = tsf.modelResult(dataDF, mdlResult, modelApproach='Best') 
+result_df = tsf.buildModel(
+    data_df,
+    future_df,
+    seasonal=12,
+    modelApproach="BEST",
+    testSize=80,
+    runType="Single",
+)
 ```
-Parameters:-
 
-  - modelApproach : str, optional
-    - BEST MAPE analysis report and can pass the model name, get the analysis report
+### Model parameters
+
+| Parameter | Description |
+| --- | --- |
+| `seasonal` | Number of observations in one seasonal cycle. Examples: `7` for daily data with weekly seasonality, `12` for monthly data with yearly seasonality, and `4` for quarterly data with yearly seasonality. |
+| `modelApproach` | `FAST` runs a reduced search. `BEST` runs the broader model search and selects the best available result. |
+| `testSize` | Percentage of historical observations reserved for testing. The default is `80`, leaving approximately 20% for testing. |
+| `runType` | For `buildModel`, use `Single`, `Thread`, or `Process`. |
+
+The model runner evaluates supported statsmodels, scikit-learn, and PyTorch
+models. Results are returned as a `DataFrame` with model status, error metrics,
+test predictions, future predictions, and runtime.
+
+## Inspect model results
+
+`modelResult` selects the model with the lowest MAPE among successful models
+when `modelApproach="BEST"`. Alternatively, pass the exact model name from the
+`Model` column in the result frame to inspect that model. It returns combined
+data for plotting and a metrics table.
+
+```python
+best_data, best_metrics = tsf.modelResult(
+    data_df,
+    result_df,
+    modelApproach="BEST",
+)
+```
+
+To inspect a specific model:
+
+```python
+model_name = result_df.loc[result_df["Status"], "Model"].iloc[0]
+model_data, model_metrics = tsf.modelResult(
+    data_df,
+    result_df,
+    modelApproach=model_name,
+)
+```
+
+An empty result frame or invalid input returns `-1`.
+
+## End-to-end example
+
+```python
+import pandas as pd
+import simpliml.timeseriesforecast as tsf
+
+source_df = pd.read_csv("monthly_sales.csv")
+data_df, future_df = tsf.generateTSData(
+    source_df,
+    format="%Y-%m",
+    freq="MS",
+    periods=12,
+)
+
+tsf.analysisData(data_df)
+
+result_df = tsf.runModel(
+    data_df,
+    future_df,
+    seasonal=12,
+    modelApproach="FAST",
+    testSize=80,
+)
+
+forecast_data, metrics = tsf.modelResult(
+    data_df,
+    result_df,
+    modelApproach="BEST",
+)
+```

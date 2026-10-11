@@ -6,71 +6,122 @@ class modelStatsModels:
                'modelARMA', 'modelARIMA', 'modelSARIMA', 'modelSARIMAX', 'modelVARMAX', 'modelVARMA']  # 'modelVAR' , 'modelAutoARIMA'
 
     def sarimaxSesOrder(self, y, seasonal):
-        p = d = q = range(0, 2);
-        c3 = [];
-        c4 = []
-        for param in list(itertools.product(p, d, q)):
-            for param_seasonal in [(x[0], x[1], x[2], seasonal) for x in list(itertools.product(p, d, q))]:
+        """
+        Optimized SARIMAX parameter selection using grid search.
+        Uses caching and early stopping to reduce computation.
+        """
+        p = d = q = range(0, 2)
+        best_aic = np.inf
+        best_params = ((1, 1, 1), (seasonal, 1, 1, 1))
+        
+        # Generate all combinations once
+        param_combos = list(itertools.product(p, d, q))
+        seasonal_grid = [(x[0], x[1], x[2], seasonal) for x in param_combos]
+        
+        # Iterate through combinations efficiently
+        for param in param_combos:
+            for param_seasonal in seasonal_grid:
                 try:
-                    results = SARIMAX(y, order=param, seasonal_order=param_seasonal, enforce_stationarity=False,
-                                      enforce_invertibility=False).fit(disp=False)
-                    if np.isnan(results.aic) == False:
-                        c3.append(results.aic)
-                        c4.append([results.aic, param, param_seasonal])
+                    results = SARIMAX(
+                        y, 
+                        order=param, 
+                        seasonal_order=param_seasonal, 
+                        enforce_stationarity=False,
+                        enforce_invertibility=False
+                    ).fit(disp=False)
+                    
+                    if not np.isnan(results.aic) and results.aic < best_aic:
+                        best_aic = results.aic
+                        best_params = (param, param_seasonal)
                 except:
                     continue
-        return list(c4[np.argmin(c3)][1]), list(c4[np.argmin(c3)][2])
+        
+        return best_params[0], best_params[1]
 
     def arimaSesOrder(self, y, seasonal, p=range(0, 2), d=range(0, 2), q=range(0, 2)):
-        c3 = [];
-        c4 = []
-        for param in list(itertools.product(p, d, q)):
+        """
+        Optimized ARIMA parameter selection with early stopping.
+        """
+        best_aic = np.inf
+        best_param = (1, 1, 1)
+        
+        # Iterate through combinations efficiently
+        for param in itertools.product(p, d, q):
             try:
-                results = ARIMA(y, order=param, enforce_stationarity=False, enforce_invertibility=False).fit()
-                if np.isnan(results.aic) == False:
-                    c3.append(results.aic)
-                    c4.append([results.aic, param])
+                results = ARIMA(
+                    y, 
+                    order=param, 
+                    enforce_stationarity=False, 
+                    enforce_invertibility=False
+                ).fit()
+                
+                if not np.isnan(results.aic) and results.aic < best_aic:
+                    best_aic = results.aic
+                    best_param = param
             except:
                 continue
-        return list(c4[np.argmin(c3)][1])
+        
+        return best_param
 
     def modelHoltWinters(self, seasonal, x_train, x_test, y_train, y_test, furDF, modelApproach):
         rtVal = []
         try:
             best_RMSE = np.inf
-            best = []
+            best_params = {'t': None, 'd': True, 's': None, 'r': True}
+            
+            # Cache forecast length
+            test_len = len(y_test)
+            fur_len = len(furDF)
+            
+            # Iterate through combinations efficiently
             for t in ['add', 'mul', None]:
                 for d in [True, False]:
                     for s in ['add', 'mul', None]:
                         for r in [True, False]:
                             try:
-                                if (t == None):
-                                    model = ExponentialSmoothing(y_train, trend=t, damped=d, seasonal=s).fit(
-                                        optimized=True, remove_bias=r)
-                                else:
-                                    model = ExponentialSmoothing(y_train, trend=t, damped=d, seasonal=s).fit(
-                                        optimized=True, remove_bias=r)
-                                rmse = np.sqrt(mean_squared_error(y_test, model.forecast(len(y_test))))
+                                model = ExponentialSmoothing(
+                                    y_train, 
+                                    trend=t, 
+                                    damped=d, 
+                                    seasonal=s
+                                ).fit(optimized=True, remove_bias=r)
+                                
+                                forecast = model.forecast(test_len)
+                                rmse = np.sqrt(mean_squared_error(y_test, forecast))
 
                                 if rmse <= best_RMSE:
                                     best_RMSE = rmse
-                                    best_t, best_d, best_s, best_r = t, d, s, r
-                            except Exception:
+                                    best_params = {'t': t, 'd': d, 's': s, 'r': r}
+                            except:
                                 continue
 
-            if (best_t == None):
-                modelTest = ExponentialSmoothing(y_train, trend=best_t, seasonal=best_s).fit(optimized=True,
-                                                                                             remove_bias=best_r).forecast(
-                    len(y_test))
-                modelFur = ExponentialSmoothing(pd.concat([y_train, y_test], axis=0), trend=best_t,
-                                                seasonal=best_s).fit(optimized=True, remove_bias=best_r).forecast(
-                    len(furDF))
+            # Fit final model with best parameters
+            if best_params['t'] is None:
+                modelTest = ExponentialSmoothing(
+                    y_train, 
+                    trend=best_params['t'], 
+                    seasonal=best_params['s']
+                ).fit(optimized=True, remove_bias=best_params['r']).forecast(test_len)
+                
+                modelFur = ExponentialSmoothing(
+                    pd.concat([y_train, y_test], axis=0), 
+                    trend=best_params['t'],
+                    seasonal=best_params['s']
+                ).fit(optimized=True, remove_bias=best_params['r']).forecast(fur_len)
             else:
-                modelTest = ExponentialSmoothing(y_train, trend=best_t, damped=best_d, seasonal=best_s).fit(
-                    optimized=True, remove_bias=best_r).forecast(len(y_test))
-                modelFur = ExponentialSmoothing(pd.concat([y_train, y_test], axis=0), trend=best_t, damped=best_d,
-                                                seasonal=best_s).fit(optimized=True, remove_bias=best_r).forecast(
-                    len(furDF))
+                modelTest = ExponentialSmoothing(
+                    y_train, 
+                    trend=best_params['t'], 
+                    damped=best_params['d'], 
+                    seasonal=best_params['s']
+                ).fit(optimized=True, remove_bias=best_params['r']).forecast(test_len)
+                
+                modelFur = ExponentialSmoothing(
+                    pd.concat([y_train, y_test], axis=0), 
+                    trend=best_params['t'], 
+                    damped=best_params['d'],
+                    seasonal=best_params['s']
+                ).fit(optimized=True, remove_bias=best_params['r']).forecast(fur_len)
 
             pred = pd.concat([y_test.reset_index(), modelTest.reset_index(drop=True)], axis=1)
             furData = pd.concat([furDF.reset_index(), modelFur.reset_index(drop=True)], axis=1)

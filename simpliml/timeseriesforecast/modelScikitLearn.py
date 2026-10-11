@@ -47,15 +47,21 @@ class modelScikitLearn:
             try:
                 modelSel = eval("sl.{0}()".format(str(pkg)))
                 if modelApproach == 'FAST':
-                    rfr_random = RandomizedSearchCV(estimator=modelSel, param_distributions=argsSel, n_iter=120,
+                    search_model = RandomizedSearchCV(estimator=modelSel, param_distributions=argsSel, n_iter=120,
                                                     scoring='neg_mean_absolute_error', cv=2, verbose=0, random_state=42,
                                                     n_jobs=-1, return_train_score=True).fit(x_train, y_train)
                 else:
-                    rfr_random = GridSearchCV(estimator=modelSel, param_grid=argsSel, scoring='neg_mean_absolute_error',
+                    search_model = GridSearchCV(estimator=modelSel, param_grid=argsSel, scoring='neg_mean_absolute_error',
                                               cv=2, verbose=0, n_jobs=-1, return_train_score=True).fit(x_train, y_train)
-                testData = eval("sl." + str(pkg) + "(**rfr_random.best_params_).fit(x_train, y_train).predict(x_test)")
-                furData = eval("sl." + str(
-                    pkg) + "(**rfr_random.best_params_).fit(pd.concat([x_train, x_test],axis=0), pd.concat([y_train, y_test],axis=0)).predict(furDF)")
+                
+                # Use the fitted model for test prediction instead of refitting
+                testData = search_model.predict(x_test)
+                
+                # For future predictions, refit with combined data
+                combined_model = eval("sl." + str(pkg) + "(**search_model.best_params_)").fit(
+                    pd.concat([x_train, x_test], axis=0), pd.concat([y_train, y_test], axis=0))
+                furData = combined_model.predict(furDF)
+                
                 modelSt = tsfCommon().modelEval(y_test, testData)
                 rtVal.append(["sklearn.ensemble", pkg, True, modelSt[0], modelSt[1], modelSt[2], modelSt[3], modelSt[4],
                               modelSt[5], modelSt[6], modelSt[7], modelSt[8], modelSt[9],

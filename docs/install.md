@@ -1,15 +1,126 @@
-## Installation
-### PyPI
-```sh
-pip install simpliml
+# Installation
+
+SimpliML is distributed on [PyPI](https://pypi.org/project/simpliml/) and
+supports Python 3.9 and newer. A virtual environment is recommended so that
+SimpliML's dependencies do not affect other Python projects.
+
+## Install from PyPI
+
+Create and activate a virtual environment, then install the latest release:
+
+### Windows (PowerShell)
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install simpliml
 ```
 
-### Dependencies
-![Pandas](https://img.shields.io/static/v1?label=Pandas&labelColor=007676&message=>=2.2.3&color=01C0C0&style=flat&logoColor=01C0C0&logo=pandas)
-![SciPy](https://img.shields.io/static/v1?label=SciPy&labelColor=007676&message=>=1.14.1&color=01C0C0&style=flat&logoColor=01C0C0&logo=SciPy)
-![scikit-learn](https://img.shields.io/static/v1?label=scikit-learn&labelColor=007676&message=>=1.5.2&color=01C0C0&style=flat&logoColor=01C0C0&logo=scikit-learn)
-![Torch](https://img.shields.io/static/v1?label=Torch&labelColor=007676&message=>=2.5.1&color=01C0C0&style=flat&logoColor=01C0C0&logo=PyTorch)
-![Statsmodels](https://img.shields.io/static/v1?label=statsmodels&labelColor=007676&message=>=0.14.4&color=01C0C0&style=flat&logoColor=01C0C0&logo=)
-![Altair](https://img.shields.io/static/v1?label=Altair&labelColor=007676&message=>=5.5.0&color=01C0C0&style=flat&logoColor=01C0C0&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAWJAAAFiQFtaJ36AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAATSSURBVHgB7d07biRVGIbhv7rtYCSCjiEZESELS70BpFoAiM4IcUDOElgTK6iAjIRVkLCBkXxR4ZYbZHnaM+2u27k8T+zMelWnXJ+rIgAAAAAAAAAAAAAAAAAAAAAAAABIWhMcddtdbd/98+dfkZmHn77wOx3RKjhq1ax/DaonkNe1QfUEcsRtd33TR7wPqieQI5omfg4IgXzkQ/fN+3C84kAgL6zi4ibgQCAvrJvG8Yr/CeSZu+7b1s05zwnkmcbVgxcEcrC/OX+8etwEPCOQg3VctgEvCOSgaXrTEj4ikPjv2UezDXhBII8um8vfAo4QyJM24IjqAzFM5FOqD6Rp4seAV1QdyGGYuAt4RdWBePbB51QdyKoJf73ik6oNxDCRU1QbiGEip6gykL7bbno355ygykDu4mEfxybgM6oMxEsZOFV1gXgpA29RXSCGibxFjUesNuBEVQVy313vPPvgLaoKpHdzzhtVE4hhIueoJhDDRM5RTSCGiZyjikAMEzlXFYEYJnKu4gMxTGSI4gMxTGSI4gMxTGSIogMxTGSoogMxTGSo0o9YbcAAxQZimMgYyr2CeGMiIygyEF+LYixFBmKYyFiKDMQwkbEUF8htd7V1c85Yigtk1ax9a5DRlHjEagNGchEFKflrUd9/uT7tB//40Ecifv/uXROZK+oKYpjI2IoJxDCRKRQTyCoubgJGVkwga/9WywSKCMRLGZhKEYF4KQNTyT4Qw0SmlH0gholMKftAmqY3LWEyWQeyHyY+JrINmEjWgRgmMrXcj1htwISyDaTkYSLpyDYQw0TmkGUghonMJctADBOZS5aBGCYyl+wCMUxkTtkFYpjInLIKxDCRuWUViGEic8sqEMNE5pZNIE/PPgwTmVc2gfhaFEvI6YjVBswsi0AME1lKFoE0vhbFQpIP5DBM3AUsIPlAPPtgSckH4mtRLCnpQAwTWVrSgRgmsrRkA+m77aZ3c87Ckg3kLh72cWwCFpRsIF7KQAqSDMRLGUhFkoEYJpKKVI9YbUACkgvkvrveefZBKpILpHdzTkKSCsQwkdQkFYhhIqlJKhDDRFKTTCCGiaQomUAME0lREoEYJpKqJAIxTCRVSQRimEiqFg/EMJGUXcTC9sPEPsjJL19fnvZzf98n86v94auLJs6QwhGrDUjUooEYJpK6Za8g3phI4hYLxNeiyMFigRgmkoPFAjFMJAeLBHLbXW3dnJODRQJZNWvfGiQLSx2x2oAMzB6Ir0WRk9kDMUwkJ7MGYphIbmYNZBUXNwEZmTWQtX+rJTOzBeKlDORotkC8lIEczRKIYSK5miUQw0RyNUsgTdOblpClyQPZDxMfE9kGZGjyQAwTydkcR6w2IFOTBmKYSO4mDcQwkdxNFohhIiWYLBDDREowWSCGiZRgkkAMEynFJIEYJlKK0QMxTKQkowdimEhJRg/EMJGSjBrI07MPw0TKMWog+69FBRRk7CNWG1CQ0QIxTKREowXS+FoUBRolkMMwcRdQmFEC8eyDUo0SiK9FUarBgRgmUrLBgRgmUrJBgfTddtO7OadggwK5i4d9HJuAQg0KxEsZKN3ZgXgpAzU4OxDDRGow5IjVBhTurEDuu+udZx8AAAAAAAAAAAAAAAAAAAAAAAAAwOL+BcH67Bny8ncOAAAAAElFTkSuQmCC)
-![Matplotlib](https://img.shields.io/static/v1?label=Matplotlib&labelColor=007676&message=>=3.9.3&color=01C0C0&style=flat&logoColor=01C0C0&logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiBzdHJva2U9IiM3NzciIGZpbGwtb3BhY2l0eT0iLjgiPgo8cGF0aCBmaWxsPSIjRkZGIiBkPSJtNjMsMWE2Myw2MyAwIDEsMCAyLDB6bTAsMTRhNDksNDkgMCAxLDAgMiwwem0wLDE0YTM1LDM1IDAgMSwwCjIsMHptMCwxNGEyMSwyMSAwIDEsMCAyLDB6bTAsMTRhNyw3IDAgMSwwIDIsMHptNjQsN0gxbTEwOC00NS05MCw5MG05MCwwLTkwLTkwbTQ1LTE4djEyNiIvPgo8cGF0aCBmaWxsPSIjRjYwIiBkPSJtNTAsOC0yMCwxMCA2OCw5MiAxMC0xMEw2NCw2NHoiLz4KPHBhdGggZmlsbD0iI0ZDMCIgZD0ibTE3LDUwdjI4TDY0LDY0eiIvPgo8cGF0aCBmaWxsPSIjN0Y3IiBkPSJtNjQsNjQgNiwzNUg1OHoiLz4KPHBhdGggZmlsbD0iI0NGMyIgZD0ibTY0LDY0IDEzLTQwIDksNXoiLz4KPHBhdGggZmlsbD0iIzA0RiIgZD0ibTY0LDY0IDE0LTYgMSw0emwtMjYsMTMgMyw0eiIvPgo8L3N2Zz4=)
-![Seaborn](https://img.shields.io/static/v1?label=seaborn&labelColor=007676&message=>=0.13.2&color=01C0C0&style=flat&logoColor=01C0C0&logo=)
+### Linux or macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install simpliml
+```
+
+If PowerShell does not allow activation scripts, enable them for the current
+user or activate the environment from Command Prompt instead:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+```bat
+.venv\Scripts\activate.bat
+```
+
+## Verify the installation
+
+Run this command while the virtual environment is active:
+
+```bash
+python -c "import simpliml; print(simpliml.__version__)"
+```
+
+The command should print the installed package version. To verify the
+time-series forecasting API as well:
+
+```bash
+python -c "import simpliml.timeseriesforecast as tsf; print(tsf.generateTSData)"
+```
+
+## Install a specific version
+
+To install the documented 1.5.0 release explicitly:
+
+```bash
+python -m pip install "simpliml==1.5.0"
+```
+
+Upgrade an existing installation with:
+
+```bash
+python -m pip install --upgrade simpliml
+```
+
+## Dependencies
+
+Installing SimpliML from PyPI installs its runtime dependencies:
+
+| Package | Purpose |
+| --- | --- |
+| pandas | Dataframe and time-series operations |
+| SciPy | Scientific computing |
+| scikit-learn | Machine-learning models and metrics |
+| statsmodels | Statistical forecasting models |
+| Altair | Interactive data visualization |
+| Matplotlib | Statistical and model plots |
+| Seaborn | Statistical visualization |
+| PyTorch | Neural-network forecasting models |
+
+PyTorch wheels vary by operating system and hardware. If you need a
+CUDA-specific build, follow the installation command provided by the
+[official PyTorch selector](https://pytorch.org/get-started/locally/) before
+installing or reinstalling SimpliML.
+
+## Install from a source checkout
+
+Clone the repository and install it in editable mode when developing:
+
+```bash
+git clone https://github.com/rajaddr/simpliml.git
+cd simpliml
+python -m venv .venv
+```
+
+Activate `.venv` using the instructions above, then install the project:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -e .
+```
+
+After installation, the package can be imported normally:
+
+```python
+import simpliml
+import simpliml.timeseriesforecast as tsf
+```
+
+## Troubleshooting
+
+- Check that the active interpreter is the one in `.venv`:
+  `python -c "import sys; print(sys.executable)"`.
+- Use `python -m pip` rather than a standalone `pip` command to ensure that
+  packages are installed into the active environment.
+- If dependency resolution fails, upgrade pip and retry:
+  `python -m pip install --upgrade pip`.
+- If a PyTorch installation is incompatible with your hardware, install the
+  appropriate wheel from the official PyTorch instructions and retry the
+  SimpliML installation.
+
+For usage examples, continue to the
+[Time Series guide](tsf.md).

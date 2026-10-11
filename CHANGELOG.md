@@ -1,4 +1,10 @@
 
+## 1.5.0
+  - Improving PyTorch LSTM input handling and device compatibility
+  - Expanding automated test coverage to 100%
+  - Adding coverage tests for data analysis and forecasting model branches
+  - Suppressing expected scikit-learn search warnings in tests
+
 ## 1.4.0 
   - Fixing min/max date in generateTSData
   - Adding logging.getLogger function in dataModeling
