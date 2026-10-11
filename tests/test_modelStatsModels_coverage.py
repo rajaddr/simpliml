@@ -516,3 +516,53 @@ def test_remaining_statsmodels_exception_handlers_and_success_paths(monkeypatch)
     monkeypatch.setattr(msm, 'auto_arima', lambda *args, **kwargs: AutoArima(), raising=False)
     assert model.modelAutoARIMA(12, x_train, x_test, y_train, y_test, future, 'FAST')[0][2] is True
 
+
+def test_holt_models_success_paths(monkeypatch):
+    msm = importlib.import_module('simpliml.timeseriesforecast.modelStatsModels')
+    model = msm.modelStatsModels()
+    y_train = pd.Series(
+        [1.0, 2.0, 3.0],
+        index=pd.Index(['2021-01', '2021-02', '2021-03'], name='Date'),
+        name='Data',
+    )
+    y_test = pd.Series(
+        [0.0, 0.0],
+        index=pd.Index(['2021-04', '2021-05'], name='Date'),
+        name='Data',
+    )
+    future = pd.DataFrame(
+        {'x': [1.0, 2.0]},
+        index=pd.Index(['2021-06', '2021-07'], name='Date'),
+    )
+
+    class ForecastModel:
+        def fit(self, *args, **kwargs):
+            return self
+
+        def forecast(self, count, **kwargs):
+            return pd.Series([0.0] * count)
+
+    class HoltWintersModel(ForecastModel):
+        forecast_calls = 0
+
+        def forecast(self, count, **kwargs):
+            type(self).forecast_calls += 1
+            value = 0.0 if type(self).forecast_calls in (1, 38) else 10.0
+            return pd.Series([value] * count)
+
+    monkeypatch.setattr(msm, 'ExponentialSmoothing', lambda *a, **k: HoltWintersModel())
+    monkeypatch.setattr(msm, 'Holt', lambda *a, **k: ForecastModel())
+    monkeypatch.setattr(msm, 'SimpleExpSmoothing', lambda *a, **k: ForecastModel())
+    monkeypatch.setattr(msm, 'AutoReg', lambda *a, **k: ForecastModel())
+    monkeypatch.setattr(msm.tsfCommon, 'modelEval', lambda *a, **k: tuple([0.0] * 10))
+
+    x_train = pd.DataFrame(index=range(len(y_train)))
+    x_test = pd.DataFrame(index=range(len(y_test)))
+    assert model.modelHoltWinters(12, x_train, x_test, y_train, y_test, future, 'FAST')[0][2]
+    assert model.modelHolt(12, x_train, x_test, y_train, y_test, future, 'FAST')[0][2]
+    assert model.modelSimpleExpSmoothing(
+        12, x_train, x_test, y_train, y_test, future, 'FAST'
+    )[0][2]
+    assert model.modelAutoRegression(
+        12, x_train, x_test, y_train, y_test, future, 'FAST'
+    )[0][2]

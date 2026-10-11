@@ -165,6 +165,16 @@ def test_buildmodel_executors_and_databuild(monkeypatch):
     db.applyDayCalc(bad_df, 'NonExistent')
 
 
+def test_submit_model_exception_is_reported(caplog):
+    dm_module = importlib.import_module('simpliml.timeseriesforecast.dataModeling')
+    result = dm_module.dataModeling().submitModel(
+        'missing_model', 7, 'FAST', pd.DataFrame(), pd.DataFrame(),
+        pd.Series(dtype=float), pd.Series(dtype=float), pd.DataFrame(),
+    )
+    assert result == [[]]
+    assert 'Model Error :: missing_model' in caplog.text
+
+
 def test_buildmodel_seasonal_filter_and_databuild_exception(monkeypatch):
     dm_module = importlib.import_module('simpliml.timeseriesforecast.dataModeling')
     msm_module = importlib.import_module('simpliml.timeseriesforecast.modelStatsModels')
@@ -217,4 +227,3 @@ def test_buildmodel_insufficient_data():
     furDF = pd.DataFrame(columns=['Date'])
     res = tsf.buildModel(dataDF, furDF)
     assert res == -1
-
