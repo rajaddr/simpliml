@@ -26,3 +26,12 @@ jobs:
           pytest --cov=simpliml --cov-report=term-missing --cov-report=json --cov-fail-under=100
           python -c "import json, pandas as pd;y1=pd.read_json('coverage.json').reset_index(); print({'schemaVersion': 1, 'label': 'Test Coverage', 'message' : int((y1[y1['index']=='percent_covered_display']['totals'].values)[0])})" > code_coverage.json
           cat code_coverage.json
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-python-${{ matrix.python-version }}
+          path: |
+            coverage.json
+            code_coverage.json
+          if-no-files-found: warn
