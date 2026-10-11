@@ -206,13 +206,13 @@ def test_modelscikitlearn_mock_line_66_directly():
     
     with patch.object(msk, 'RandomizedSearchCV', return_value=mock_search):
         with patch.object(msk, 'GridSearchCV', return_value=mock_search):
-            with patch('simpliml.timeseriesforecast.modelScikitLearn.sl') as mock_sl:
+            with patch.object(msk, 'sl') as mock_sl:
                 # Mock the estimator class
                 mock_sl.RandomForestRegressor = MagicMock(return_value=mock_estimator)
                 mock_sl.__all__ = ['RandomForestRegressor']
                 
                 # Mock tsfCommon.modelEval
-                with patch('simpliml.timeseriesforecast.modelScikitLearn.tsfCommon') as mock_common:
+                with patch.object(msk, 'tsfCommon') as mock_common:
                     mock_common.return_value.modelEval.return_value = tuple([1.0] * 10)
                     
                     model = msk.modelScikitLearn('RandomForestRegressor')
@@ -459,4 +459,3 @@ def test_modelscikitlearn_force_line_66_success():
     success_results = [r for r in res if r[2] is True]
     # Depending on random data, might not always succeed, but try multiple seeds
     assert len(res) > 0, "Should have at least attempted"
-

@@ -1,8 +1,10 @@
+from contextlib import ExitStack
+from importlib import import_module
+from unittest.mock import patch
+
 import pytest
 import pandas as pd
-import numpy as np
 import simpliml.timeseriesforecast as tsf
-from unittest.mock import patch
 
 
 @pytest.fixture(scope="session")
@@ -61,35 +63,39 @@ def mock_model_result():
 
 @pytest.fixture
 def mock_fast_model(mock_model_result):
-    with patch('simpliml.timeseriesforecast.dataModeling.dataModeling.buildModel') as mock_build:
+    data_modeling_module = import_module('simpliml.timeseriesforecast.dataModeling')
+    with patch.object(data_modeling_module.dataModeling, 'buildModel') as mock_build:
         mock_build.return_value = mock_model_result
         yield mock_build
 
 
 @pytest.fixture
 def mock_slow_models():
-    with patch('simpliml.timeseriesforecast.modelStatsModels.modelStatsModels.modelARIMA', create=True) as mock_arima, \
-         patch('simpliml.timeseriesforecast.modelStatsModels.modelStatsModels.modelSARIMA', create=True) as mock_sarima, \
-         patch('simpliml.timeseriesforecast.modelStatsModels.modelStatsModels.modelAutoARIMA', create=True) as mock_auto, \
-         patch('simpliml.timeseriesforecast.modelStatsModels.modelStatsModels.modelExponentSmoothing', create=True) as mock_exp, \
-         patch('simpliml.timeseriesforecast.modelPyTorch.modelPyTorch.runModelPyTorchLSTM', create=True) as mock_lstm, \
-         patch('simpliml.timeseriesforecast.modelScikitLearn.modelScikitLearn.runmodelEnsemble', create=True) as mock_ensemble:
+    stats_module = import_module('simpliml.timeseriesforecast.modelStatsModels')
+    pytorch_module = import_module('simpliml.timeseriesforecast.modelPyTorch')
+    sklearn_module = import_module('simpliml.timeseriesforecast.modelScikitLearn')
+    stats_methods = (
+        'modelHoltWinters', 'modelHolt', 'modelSimpleExpSmoothing',
+        'modelAutoRegression', 'modelMovingAverage', 'modelARMA',
+        'modelARIMA', 'modelSARIMA', 'modelSARIMAX', 'modelVARMA',
+        'modelVARMAX',
+    )
+    mock_result = [['mock', 'mock', True] + [0] * 12]
 
-        mock_arima.return_value = [True, 0.05, 100, 105]
-        mock_sarima.return_value = [True, 0.04, 100, 104]
-        mock_auto.return_value = [True, 0.045, 100, 104.5]
-        mock_exp.return_value = [True, 0.06, 100, 106]
-        mock_lstm.return_value = np.array([105, 106, 107])
-        mock_ensemble.return_value = [True, 0.035, 100, 103.5]
-
-        yield {
-            'arima': mock_arima,
-            'sarima': mock_sarima,
-            'auto': mock_auto,
-            'exp': mock_exp,
-            'lstm': mock_lstm,
-            'ensemble': mock_ensemble
+    with ExitStack() as stack:
+        mocks = {
+            name: stack.enter_context(patch.object(stats_module.modelStatsModels, name))
+            for name in stats_methods
         }
+        mocks['lstm'] = stack.enter_context(
+            patch.object(pytorch_module.modelPyTorch, 'modelPyTorchLSTM')
+        )
+        mocks['ensemble'] = stack.enter_context(
+            patch.object(sklearn_module.modelScikitLearn, 'runmodelEnsemble')
+        )
+        for mock in mocks.values():
+            mock.return_value = mock_result
+        yield mocks
 
 
 def pytest_configure(config):
